@@ -18,6 +18,11 @@ let queries = {}
 let routes = new Set()
 let requestMap = {}
 let aliases = {}
+let workerOptions = {}
+
+export function setWorkerOptions(options) {
+  workerOptions = options;
+}
 
 function requestKey(request) {
   return Array.from(routes).find(i => {
@@ -187,7 +192,7 @@ before(() => {
   worker.events.on('request:start', registerRequest)
   worker.events.on('response:mocked', completeRequest)
   worker.events.on('response:bypass', completeRequest)
-  cy.wrap(worker.start(), { log: false })
+  cy.wrap(worker.start(workerOptions), { log: false })
 })
 
 Cypress.on('test:before:run', () => {
