@@ -187,7 +187,15 @@ before(() => {
   worker.events.on('request:start', registerRequest)
   worker.events.on('response:mocked', completeRequest)
   worker.events.on('response:bypass', completeRequest)
-  cy.wrap(worker.start(), { log: false })
+  cy.wrap(worker.start({
+    onUnhandledRequest: 'bypass',
+    serviceWorker: {
+      url: '/provider/mockServiceWorker.js',
+      options: {
+        scope: '/provider/',
+      },
+    },
+  }), { log: false })
 })
 
 Cypress.on('test:before:run', () => {
